@@ -1,0 +1,121 @@
+MassassignmentSecurityForm
+===============
+
+Usage:
+------
+
+1. Add gem to your Gemfile
+gem 'massassignment_security_form', :git => 'git://github.com/webhoernchen/massassignment_security_form.git'
+
+2. bundle install
+
+3. Create an initializer (massassignment_security_form.rb) like this:
+MassassignmentSecurityForm::Config.password = 'Long secure password for encryption'
+
+4. Your forms are secure now!
+
+
+Example:
+--------
+<% form_tag({:action => "update"}) do %>
+  <%= error_messages_for :user %>
+
+  <table>
+    <tr>
+      <td><label for="user_title">Title:</label></td>
+      <td><%= text_field :user, :title %></td>
+    </tr>
+    <tr>
+      <td><label for="user_first_name">First name:</label></td>
+      <td><%= text_field :user, :first_name %></td>
+    </tr>
+    <tr>
+      <td><label for="user_name">Name:</label></td>
+      <td><%= text_field :user, :name %></td>
+    </tr>
+  </table>
+<% end %>
+
+It creates the following form:
+
+<form method="post" action="/route/to/users/update">
+  <table>
+    <tr>
+      <td><label for="user_title">Titel:</label></td>
+      <td><input type="text" value="" size="30" name="user[title]" id="user_title"></td>
+    </tr>
+    <tr>
+      <td><label for="user_first_name">First name:</label></td>
+      <td><input type="text" value="Christian" size="30" name="user[first_name]" id="user_first_name"></td>
+    </tr>
+    <tr>
+      <td><label for="user_name">Name:</label></td>
+      <td><input type="text" value="Eichhorn" size="30" name="user[name]" id="user_name"></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="submit" value="save" name="commit">
+      </td>
+    </tr>
+  </table>
+
+  <input type="hidden" value="EncryptedHashWithFormFieldsForUser" name="massassignment_fields">
+</form>
+
+After the form is committed your controller remove all attributes of the users hash, which are not allowed in the form.
+
+
+Security Example:
+If your Admin-Verfication is an attribute of the user (:admin => true) and 
+anyone adds a form field to your form in the browser like this:
+<input type="hidden" value="1" name="user[admin]">
+
+Normally (if you add no protection to the user class):
+ActiveRecord will set the attribute "admin" to true for the given user on 
+user.#update_attributes(params[:user])
+
+This GEM removes the attr "admin" of the user params hash, because the attribute is not used in the form!
+
+
+For Testing:
+------------
+Disable the Gem for your functional tests:
+
+MassassignmentSecurityForm::Config.remove_not_allowed_massassignment_fields = false
+
+
+Motivation
+----------
+ * Write a simple fix for the massassignment security problem in rails (ActiveRecord)
+
+
+Tested with:
+------------
+
+* Rails 2.3.14
+* formtastic 1.2.4
+
+
+Help:
+-----
+This GEM should work with the most form_helpers in Rails
+
+If you use a plugin or a gem with other form_helpers you can add the functionality of this GEM:
+Define an extension for your form_helper like this:
+
+def other_form_helper(object_name, method, *args)
+  _add_form_field(object_name, method)
+  super(object_name, method, *args)
+end
+
+Thats all!
+
+For all other improvements:
+* Please fork this GEM and send a pull request!
+
+
+Credits
+-------
+
+Written by Christian Eichhorn
+http://www.webmasters.de
