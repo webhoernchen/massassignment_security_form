@@ -95,7 +95,7 @@ module MassassignmentSecurityForm
             attr_name = attr.to_s
             # normale Attribute
             # oder date_select attribute
-            !(attrs.include?(attr_name) || attrs.include?(attr_name.gsub(/\([1-6]\)$/, '')))
+            !(attrs.include?(attr_name) || attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
           end
         end
       end
