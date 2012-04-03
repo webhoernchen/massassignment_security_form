@@ -69,7 +69,8 @@ module MassassignmentSecurityForm
     end
 
     def add_column(object_name, method_name)
-      form_columns_for(object_name) << method_name.to_s
+      form_columns_for(object_name) << method_name.to_s \
+        unless form_columns_for(object_name).include?(method_name.to_s)
     end
 
     def to_encrypted_string

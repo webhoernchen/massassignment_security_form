@@ -72,7 +72,7 @@ module MassassignmentSecurityForm
         super(object_name, method, *args)
       end
 
-      def time_select(object_name, method, *args)
+      def datetime_select(object_name, method, *args)
         _add_form_field(object_name, method)
         super(object_name, method, *args)
       end
