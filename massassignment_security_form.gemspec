@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Christian Eichhorn"]
   s.email       = ["c.eichhorn@webmasters.de"]
   s.homepage    = ["http://www.webmasters.de"]
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = "Massassignment protection in forms"
+  s.description = "Massassignment protection in forms"
 
   s.rubyforge_project = "massassignment_security_form"
   s.files         = Dir.glob(File.expand_path("../**/*", __FILE__)).select {|f| File.file?(f) }.collect {|f| f.gsub(File.expand_path("../", __FILE__) + '/', '') }
