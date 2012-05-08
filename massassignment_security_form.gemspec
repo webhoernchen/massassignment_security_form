@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Christian Eichhorn"]
   s.email       = ["c.eichhorn@webmasters.de"]
-  s.homepage    = ["http://www.webmasters.de"]
+  s.homepage    = "http://www.webmasters.de"
   s.summary     = "Massassignment protection in forms"
   s.description = "Massassignment protection in forms"
 
