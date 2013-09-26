@@ -1,0 +1,57 @@
+PATH
+  remote: ../../../
+  specs:
+    massassignment_security_form (1.0.0)
+      actionpack (>= 2.3)
+      rails (>= 2.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    actionmailer (2.3.18)
+      actionpack (= 2.3.18)
+    actionpack (2.3.18)
+      activesupport (= 2.3.18)
+      rack (~> 1.1.0)
+    activerecord (2.3.18)
+      activesupport (= 2.3.18)
+    activeresource (2.3.18)
+      activesupport (= 2.3.18)
+    activesupport (2.3.18)
+    factory_girl (2.6.4)
+      activesupport (>= 2.3.9)
+    json (1.8.0)
+    metaclass (0.0.1)
+    mocha (0.12.10)
+      metaclass (~> 0.0.1)
+    mysql2 (0.2.20)
+    rack (1.1.6)
+    rails (2.3.18)
+      actionmailer (= 2.3.18)
+      actionpack (= 2.3.18)
+      activerecord (= 2.3.18)
+      activeresource (= 2.3.18)
+      activesupport (= 2.3.18)
+      rake (>= 0.8.3)
+    rake (10.1.0)
+    rdoc (4.0.1)
+      json (~> 1.4)
+    shoulda (3.0.1)
+      shoulda-context (~> 1.0.0)
+      shoulda-matchers (~> 1.0.0)
+    shoulda-context (1.0.2)
+    shoulda-matchers (1.0.0)
+    timecop (0.5.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  factory_girl
+  massassignment_security_form (= 1.0)!
+  mocha (!= 0.14.0, != 0.13.3, != 0.13.2, != 0.13.1, != 0.13.0)
+  mysql2 (< 0.3.0)
+  rails (>= 2.3.10, < 3.0.0)
+  rdoc
+  shoulda
+  timecop (< 0.5.6)
