@@ -7,11 +7,18 @@ module MassassignmentSecurityForm
     MASSASSIGNMENT_PARAMS_NAME = "massassignment_fields"
 
     class << self
-      attr_writer :password
-      attr_accessor_with_default :remove_not_allowed_massassignment_fields, true
+      attr_writer :password, :remove_not_allowed_massassignment_fields
 
       def password
         @password || raise("Please define #{self.name}.password in your initializer")
+      end
+
+      def remove_not_allowed_massassignment_fields
+        if @remove_not_allowed_massassignment_fields.nil?
+          @remove_not_allowed_massassignment_fields = true
+        else
+          @remove_not_allowed_massassignment_fields
+        end
       end
     end
   end
