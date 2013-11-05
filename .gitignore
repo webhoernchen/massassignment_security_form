@@ -1,2 +1,3 @@
 *.swp
 *.un~
+test_apps/*/log/*.log
