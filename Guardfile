@@ -10,7 +10,7 @@ module ::Guard
       notify good_or_bad
     end
 
-    def run_on_change(paths)
+    def run_on_modifications(paths)
       paths = paths.select {|path| !path.include?('schema.rb')}
       unless paths.empty?
         good_or_bad = system "script/run_tests.sh"
