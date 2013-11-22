@@ -22,12 +22,15 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency('rails', ">= 2.3")
       s.add_runtime_dependency('actionpack', ">= 2.3")
+      s.add_runtime_dependency('base32')
     else
       s.add_dependency('rails', ">= 2.3")
       s.add_dependency('actionpack', ">= 2.3")
+      s.add_dependency('base32')
     end
   else
     s.add_dependency('rails', ">= 2.3")
     s.add_dependency('actionpack', ">= 2.3")
+    s.add_dependency('base32')
   end
 end
