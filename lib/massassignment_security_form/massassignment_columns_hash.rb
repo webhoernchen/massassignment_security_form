@@ -1,5 +1,6 @@
 require 'openssl'
 require 'digest/sha1'
+require 'base32'
 
 module MassassignmentSecurityForm
   class Config
