@@ -18,12 +18,14 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
 
   context "form with text_field" do
     subject do 
-      render :inline => <<-END
+      form_html = <<-END
       <% def protect_against_forgery?; false; end -%>
-      <% form_tag '/test' do %>
+      <%= form_tag '/test' do %>
         <%= text_field :person, :first_name %>
       <% end %>
       END
+      form_html.gsub!("<%= form", "<% form") if Rails.version <= "3.0"
+      render :inline => form_html
     end
 
     should "render massassignment_fields" do
