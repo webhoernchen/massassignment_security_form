@@ -3,6 +3,7 @@ PATH
   specs:
     massassignment_security_form (1.0.0)
       actionpack (>= 2.3)
+      base32
       rails (>= 2.3)
 
 GEM
@@ -37,6 +38,7 @@ GEM
     activesupport (3.1.12)
       multi_json (~> 1.0)
     arel (2.2.3)
+    base32 (0.2.0)
     builder (3.0.4)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)

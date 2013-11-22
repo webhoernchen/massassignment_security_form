@@ -3,6 +3,7 @@ PATH
   specs:
     massassignment_security_form (1.0.0)
       actionpack (>= 2.3)
+      base32
       rails (>= 2.3)
 
 GEM
@@ -36,6 +37,7 @@ GEM
       activesupport (= 3.0.20)
     activesupport (3.0.20)
     arel (2.0.10)
+    base32 (0.2.0)
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
