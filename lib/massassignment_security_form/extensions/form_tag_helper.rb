@@ -8,28 +8,6 @@ module MassassignmentSecurityForm
         end
       end
 
-      def form_tag_with_massassignment_security(*args, &block)
-        if block_given?
-          _init_form_fields
-
-          if block.arity >= 1
-            form_tag_without_massassignment_security(*args) do |f|
-              yield(f)
-              create_hidden_field_for_form_fields
-            end
-          else
-            form_tag_without_massassignment_security(*args) do
-              yield
-              create_hidden_field_for_form_fields
-            end
-          end
-          
-          _clear_form_fields
-        else
-          form_tag_without_massassignment_security(*args)
-        end
-      end
-
 
       def form_for_with_massassignment_security(*args, &block)
         _init_form_fields
@@ -45,8 +23,8 @@ module MassassignmentSecurityForm
       private
       def create_hidden_field_for_form_fields
 #        if hashed_content = _generate_form_fields_hash
-          concat(tag :input, :value => _generate_form_fields_hash, 
-            :name => MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME, :type => 'hidden')
+          tag :input, :value => _generate_form_fields_hash, 
+            :name => MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME, :type => 'hidden'
 #        end
       end
 
@@ -70,5 +48,44 @@ module MassassignmentSecurityForm
         _form_fields.to_encrypted_string
       end
     end
+
+    module FormTagHelperRails23
+      def form_tag_with_massassignment_security(*form_args, &block)
+        if block_given?
+          _init_form_fields
+
+          form_tag_without_massassignment_security(*form_args) do |*args|
+            yield(*args)
+            concat create_hidden_field_for_form_fields
+          end
+          
+          _clear_form_fields
+        else
+          form_tag_without_massassignment_security(*args)
+        end
+      end
+    end
+
+    module FormTagHelperRails3
+      def form_tag_with_massassignment_security(*form_args, &block)
+        if block_given?
+          _init_form_fields
+
+          html = form_tag_without_massassignment_security(*form_args) do |*args|
+            capture(*args, &block) << create_hidden_field_for_form_fields.html_safe
+          end
+          
+          _clear_form_fields
+          
+          html
+        else
+          form_tag_without_massassignment_security(*args)
+        end
+      end
+    end
   end
 end
+
+ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelperRails23) if Rails.version < '3.0'
+ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelperRails3) if Rails.version >= '3.0' 
+ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelper)

@@ -14,7 +14,6 @@ begin
   require "massassignment_security_form/extensions/formtastic"
   require "massassignment_security_form/massassignment_columns_hash"
 
-  ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelper)
   ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormHelper)
   ActionController::Base.send(:include, MassassignmentSecurityForm::Extensions::Controller)
   

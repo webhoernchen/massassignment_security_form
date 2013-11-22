@@ -29,7 +29,6 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     end
 
     should "render massassignment_fields" do
-      p subject
       assert subject.include?(MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME)
     end
   end
