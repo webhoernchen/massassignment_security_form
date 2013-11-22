@@ -12,7 +12,7 @@ do
     cd $local_folder/test_apps/$test_app
     rvm use $(cat RUBY_VERSION)
     export BUNDLE_GEMFILE="$local_folder/test_apps/$test_app/Gemfile"
-    bundle install
+#    bundle install
     bundle exec rake db:create:all
     bundle exec rake db:migrate
     bundle exec rake 
