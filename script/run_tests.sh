@@ -9,6 +9,7 @@ for test_app in $(ls test_apps)
 do
   if [[ $RESULT == 0 ]]
   then
+    echo $test_app
     cd $local_folder/test_apps/$test_app
     rvm use $(cat RUBY_VERSION)
     export BUNDLE_GEMFILE="$local_folder/test_apps/$test_app/Gemfile"
