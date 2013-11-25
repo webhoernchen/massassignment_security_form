@@ -50,6 +50,7 @@ end
 
 group :test do
   gem "shoulda"
+  gem 'shoulda-kept-assign-to'
   gem 'timecop'
   gem "mocha"
   gem "factory_girl"

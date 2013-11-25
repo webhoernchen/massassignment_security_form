@@ -41,6 +41,7 @@ group :test do
 #  gem 'turn', '~> 0.8.3', :require => false
 
   gem "shoulda"
+  gem 'shoulda-kept-assign-to'
   gem 'timecop'
   gem "mocha"
   gem "factory_girl"
