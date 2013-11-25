@@ -24,6 +24,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
         <%= text_field :person, :first_name %>
       <% end %>
       END
+      
       form_html.gsub!("<%= form", "<% form") if Rails.version <= "3.0"
       render :inline => form_html
     end
@@ -42,6 +43,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
         <%= f.text_field :first_name %>
       <% end %>
       END
+      
       form_html.gsub!("<%= form", "<% form") if Rails.version <= "3.0"
       render :inline => form_html
     end
@@ -135,7 +137,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     
     context "with input :birthday, :as => :date" do 
       setup do 
-        @generated_html = formtastic_form_input '<%= f.input :birthday, :as => :date %>'
+        @generated_html = formtastic_form_input '<%= f.input :birthday, :as => :date_select %>'
       end
 
       should "set massassignment_fields" do
@@ -165,9 +167,10 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     <% end %>
   <% end %>
 END
-    if Rails.version <= "3.0"
-      form_html.gsub!("<%= semantic", "<% semantic")
-      form_html.gsub!("<%= f.inputs", "<% f.inputs")
+    if Rails.version <= '3.0'
+      form_html.gsub!('<%= semantic', '<% semantic')
+      form_html.gsub!('<%= f.inputs', '<% f.inputs')
+      form_html.gsub!(':as => :date_select ', ':as => :date ')
     end
     render :inline => form_html
   end
