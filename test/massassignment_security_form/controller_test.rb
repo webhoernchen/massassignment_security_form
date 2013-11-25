@@ -99,6 +99,44 @@ class MassassignmentSecurityForm::ControllerTest < ActionController::TestCase
         assert person.first_name.blank?
       end
     end
+    
+    context "on post :create with valid attributes and with valid MASSASSIGNMENT_PARAM for last_name and birthday" do 
+      setup do
+        @form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        @form_fields.add_column 'person', 'last_name'
+        @form_fields.add_column 'person', 'birthday'
+        
+        post :create, :person => {
+          :first_name => 'first name',
+          :last_name => 'last name',
+          'birthday(1i)' => '2013',
+          'birthday(2i)' => '7',
+          'birthday(3i)' => '11'},
+          MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME => @form_fields.to_encrypted_string
+      end
+
+      should assign_to :person
+      should respond_with :created
+
+      should 'create a person' do 
+        assert_equal 1, MassassignmentSecurityFormPerson.count
+      end
+
+      should 'build the person with last_name attribute' do 
+        person = assigns(:person)
+        assert_equal 'last name', person.last_name
+      end
+
+      should 'build the person with birthday attribute' do 
+        person = assigns(:person)
+        assert_equal Date.new(2013, 7, 11), person.birthday
+      end
+
+      should 'not build the person with first_name attribute' do 
+        person = assigns(:person)
+        assert person.first_name.blank?
+      end
+    end
   end
 
   context 'MassassignmentSecurityForm::Config.remove_not_allowed_massassignment_fields = false' do
