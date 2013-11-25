@@ -151,9 +151,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     html_object = Hpricot.parse(html)
     tag = html_object.search("input[@name=#{MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME}]").first
     encrypted_hash = tag.attributes['value']
-    p encrypted_hash
     columns_hash = MassassignmentSecurityForm::MassassignmentColumnsHash.parse_from(encrypted_hash)
-    p columns_hash.form_columns
     columns_hash.form_columns
   end
 
@@ -167,8 +165,10 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     <% end %>
   <% end %>
 END
-    form_html.gsub!("<%= semantic", "<% semantic") if Rails.version <= "3.0"
-    form_html.gsub!("<%= f.inputs", "<% f.inputs") if Rails.version <= "3.0"
+    if Rails.version <= "3.0"
+      form_html.gsub!("<%= semantic", "<% semantic")
+      form_html.gsub!("<%= f.inputs", "<% f.inputs")
+    end
     render :inline => form_html
   end
 end

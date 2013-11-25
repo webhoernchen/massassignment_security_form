@@ -10,10 +10,8 @@ module MassassignmentSecurityForm
 
       private
       def create_hidden_field_for_form_fields
-#        if hashed_content = _generate_form_fields_hash
-          tag :input, :value => _generate_form_fields_hash, 
-            :name => MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME, :type => 'hidden'
-#        end
+        tag :input, :value => _generate_form_fields_hash, 
+          :name => MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME, :type => 'hidden'
       end
 
       def _init_form_fields
