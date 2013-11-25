@@ -39,6 +39,7 @@ GEM
     arel (2.0.10)
     base32 (0.2.0)
     builder (2.1.2)
+    country_select (1.2.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     factory_girl (4.2.0)
@@ -98,6 +99,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  country_select
   factory_girl
   massassignment_security_form (= 1.0)!
   mocha (!= 0.13.2, != 0.13.1, != 0.13.0)
