@@ -5,6 +5,7 @@ gem 'mysql2'
 
 gem 'country_select'
 gem 'formtastic', '< 2.3'
+gem 'hpricot'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

@@ -7,6 +7,7 @@ gem 'verification'
 
 gem 'country_select'
 gem 'formtastic', '< 2.3'
+gem 'hpricot'
 
 group :test do
   gem "shoulda"

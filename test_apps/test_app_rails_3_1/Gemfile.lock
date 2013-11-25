@@ -55,6 +55,7 @@ GEM
     formtastic (2.2.1)
       actionpack (>= 3.0)
     hike (1.2.3)
+    hpricot (0.8.6)
     i18n (0.6.5)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
@@ -138,6 +139,7 @@ DEPENDENCIES
   country_select
   factory_girl
   formtastic (< 2.3)
+  hpricot
   jquery-rails
   massassignment_security_form (= 1.0)!
   mocha

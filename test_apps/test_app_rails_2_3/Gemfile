@@ -7,6 +7,7 @@ gem 'mysql2', "< 0.3.0"
 
 gem 'country_select'
 gem 'formtastic', '< 2.0.0', '!= 1.2.5'
+gem 'hpricot'
 
 group :test do
   gem "shoulda"
