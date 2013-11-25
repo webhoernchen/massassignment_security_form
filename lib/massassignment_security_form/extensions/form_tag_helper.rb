@@ -8,18 +8,6 @@ module MassassignmentSecurityForm
         end
       end
 
-
-      def form_for_with_massassignment_security(*args, &block)
-        _init_form_fields
-        
-        form_for_without_massassignment_security(*args) do |f|
-          yield(f)
-          create_hidden_field_for_form_fields
-        end
-
-        _clear_form_fields
-      end
-
       private
       def create_hidden_field_for_form_fields
 #        if hashed_content = _generate_form_fields_hash
@@ -61,8 +49,19 @@ module MassassignmentSecurityForm
           
           _clear_form_fields
         else
-          form_tag_without_massassignment_security(*args)
+          form_tag_without_massassignment_security(*form_args)
         end
+      end
+
+      def form_for_with_massassignment_security(*args, &block)
+        _init_form_fields
+        
+        form_for_without_massassignment_security(*args) do |f|
+          yield(f)
+          concat create_hidden_field_for_form_fields
+        end
+
+        _clear_form_fields
       end
     end
 
@@ -79,8 +78,20 @@ module MassassignmentSecurityForm
           
           html
         else
-          form_tag_without_massassignment_security(*args)
+          form_tag_without_massassignment_security(*form_args)
         end
+      end
+
+      def form_for_with_massassignment_security(*args, &block)
+        _init_form_fields
+        
+        html = form_for_without_massassignment_security(*args) do |f|
+          capture(f, &block) << create_hidden_field_for_form_fields.html_safe
+        end
+
+        _clear_form_fields
+
+        html
       end
     end
   end
