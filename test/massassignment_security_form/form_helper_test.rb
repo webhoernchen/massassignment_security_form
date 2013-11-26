@@ -73,6 +73,13 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
       "<%= #{form_helper_name} :person, :first_name %>",
       {'person' => ['first_name']}
   end
+
+  [:search_field, :telephone_field, :phone_field, :url_field, :email_field,
+   :number_field, :range_field].each do |form_helper_name|
+    form_helper_context "#{form_helper_name} :person, :first_name", 
+      "<%= #{form_helper_name} :person, :first_name %>",
+      {'person' => ['first_name']}
+  end if Rails.version >= '3.0'
     
   form_helper_context "radio_button :person, :salutation", 
     "<%= radio_button :person, :salutation, 'mr' %><%= radio_button :person, :salutation, 'mrs' %>",
