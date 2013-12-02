@@ -69,7 +69,7 @@ module MassassignmentSecurityForm
           _init_form_fields
 
           html = form_tag_without_massassignment_security(*form_args) do |*args|
-            capture(*args, &block) << create_hidden_field_for_form_fields.html_safe
+            capture(*args, &block).to_s << create_hidden_field_for_form_fields.html_safe
           end
           
           _clear_form_fields
