@@ -65,7 +65,7 @@ module MassassignmentSecurityForm
 
     module FormTagHelperRails3
       def form_tag_with_massassignment_security(*form_args, &block)
-        if block_given?
+        if block_given? && !@_form_fields
           _init_form_fields
 
           html = form_tag_without_massassignment_security(*form_args) do |*args|
@@ -76,7 +76,7 @@ module MassassignmentSecurityForm
           
           html
         else
-          form_tag_without_massassignment_security(*form_args)
+          form_tag_without_massassignment_security(*form_args, &block)
         end
       end
 
@@ -96,5 +96,5 @@ module MassassignmentSecurityForm
 end
 
 ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelperRails23) if Rails.version < '3.0'
-ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelperRails3) if Rails.version >= '3.0' 
+ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelperRails3) if Rails.version >= '3.0'
 ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormTagHelper)

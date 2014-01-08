@@ -31,6 +31,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
 
     should "render massassignment_fields" do
       assert subject.include?(MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME)
+      assert_equal 1, subject.scan(MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME).count
     end
   end
 
@@ -50,6 +51,7 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
 
     should "render massassignment_fields" do
       assert subject.include?(MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME)
+      assert_equal 1, subject.scan(MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME).count
     end
   end
 
