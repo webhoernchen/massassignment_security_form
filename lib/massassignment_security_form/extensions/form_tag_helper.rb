@@ -19,11 +19,11 @@ module MassassignmentSecurityForm
       end
 
       def _form_fields
-        @_form_fields ||= MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        @_form_fields
       end
       
       def _add_form_field(object_name, method)
-        _form_fields.add_column(object_name, method)
+        _form_fields && _form_fields.add_column(object_name, method)
       end
       
       def _clear_form_fields
@@ -65,7 +65,7 @@ module MassassignmentSecurityForm
 
     module FormTagHelperRails3
       def form_tag_with_massassignment_security(*form_args, &block)
-        if block_given? && !@_form_fields
+        if block_given? && @_form_fields.nil?
           _init_form_fields
 
           html = form_tag_without_massassignment_security(*form_args) do |*args|
