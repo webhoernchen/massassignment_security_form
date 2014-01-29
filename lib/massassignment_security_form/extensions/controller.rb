@@ -3,19 +3,23 @@ module MassassignmentSecurityForm
     module Controller
       def self.included(base)
         base.class_eval do
-          before_filter :remove_not_allowed_massassignment_fields_from_params, 
-            :if => :allow_removing_massassignment_fields_from_params
+          before_filter :remove_not_allowed_massassignment_fields_from_params
         end
       end
 
       private
       def remove_not_allowed_massassignment_fields_from_params
-        if allow_fields_encrypted = params[MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME]
-          allowed_columns = MassassignmentSecurityForm::MassassignmentColumnsHash.parse_from(allow_fields_encrypted) 
-          allowed_columns.remove_not_allowed_massassignments_from(params)
-        else
-          remove_all_massassignemnts_from_params
+        if allow_removing_massassignment_fields_from_params
+          if allow_fields_encrypted = params[MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME]
+            allowed_columns = MassassignmentSecurityForm::MassassignmentColumnsHash.parse_from(allow_fields_encrypted) 
+            allowed_columns.remove_not_allowed_massassignments_from(params)
+          else
+            remove_all_massassignemnts_from_params
+          end
         end
+        
+        params.respond_to?(:permit!) && params.permit!
+        
         true
       end
 
