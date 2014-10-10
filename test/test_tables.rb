@@ -22,6 +22,7 @@ module TestTables
       t.string :first_name, :last_name, :salutation
       t.date :birthday
       t.boolean :terms_of_use
+      t.integer :seo_id
     end
   end
 

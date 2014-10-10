@@ -59,6 +59,8 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
     context context_name do
       setup do 
         @_form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        form_line.gsub!("<%= form", "<% form") if Rails.version <= "3.0"
+        form_line.gsub!("<%= f.fields_for", "<% f.fields_for") if Rails.version <= "3.0"
         render :inline => form_line
       end
 
@@ -103,6 +105,19 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
   form_helper_context "select :person, :group_ids", 
     "<%= select :person, :group_ids, {1 => 'admins', 2 => 'test'} %>",
     {'person' => ['group_ids']}
+
+  form_test = <<-END
+  <% def protect_against_forgery?; false; end -%>
+  <% @person = MassassignmentSecurityFormPerson.new -%>
+  <%= form_for @person, :as => :person, :url => '/test' do |f| %>
+    <%= f.fields_for :seo, MassassignmentSecurityFormPerson.new do |seo_form| %>
+      <%= seo_form.text_field :first_name %>
+    <% end %>
+  <% end %>
+END
+  form_helper_context "form_for with fields_for",
+    form_test,
+    {:person => {:seo_attributes => [:first_name]}}
 
   context "A formtastic form for a person" do 
     context "with input :salutation, :select" do 
