@@ -123,7 +123,7 @@ END
         assert !form_columns.blank?
         expected = {'person' => [
           'first_name', 
-          {"seo_attributes"=>{"columns"=>["first_name"], "type"=>"one"}} 
+          {"seo_attributes"=>{"columns"=>["first_name"], "many_reflection"=>false}} 
           ]
         }
         assert_equal(expected, form_columns)
@@ -147,7 +147,7 @@ END
         assert !form_columns.blank?
         expected = {'person' => [
           'first_name', 
-          {"seo_attributes"=>{"columns"=>["first_name", "id"], "type"=>"one"}} 
+          {"seo_attributes"=>{"columns"=>["first_name", "id"], "many_reflection"=>false}} 
           ]
         }
         assert_equal(expected, form_columns)
@@ -170,7 +170,7 @@ END
         assert !form_columns.blank?
         expected = {'person' => [
           'first_name', 
-          {"employees_attributes"=>{"columns"=>["first_name"], "type"=>"many"}} 
+          {"employees_attributes"=>{"columns"=>["first_name"], "many_reflection"=>true}} 
           ]
         }
         assert_equal(expected, form_columns)

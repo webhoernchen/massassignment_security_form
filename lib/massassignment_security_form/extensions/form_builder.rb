@@ -14,17 +14,13 @@ module MassassignmentSecurityForm
           name.to_sym
         end
 
-        one_or_many_reflection = if reflection = object.class.reflect_on_association(name)
-          if [:has_many, :has_and_belongs_to_many].include?(reflection.macro)
-            :many
-          else
-            :one
-          end
+        many_reflection = if reflection = object.class.reflect_on_association(name)
+          reflection.collection?
         else
-          :one
+          false
         end
        
-        @template.send :_init_nested_form_field_for_key, [object_name, key, one_or_many_reflection]
+        @template.send :_init_nested_form_field_for_key, [object_name, key, many_reflection]
         fields_for_without_massassignment_security_form name, *args, &block
       ensure
         @template.send :_clear_nested_form_field_for_key
