@@ -130,6 +130,30 @@ END
       end
     end
     
+    context "with fields_for one reflection with saved item" do 
+      setup do 
+        @generated_html = form_for_input <<-END
+<%= f.text_field :first_name %>
+<% person = MassassignmentSecurityFormPerson.create!(:last_name => 'seo') %>
+<%= f.fields_for :seo, person do |seo_form| %>
+  <%= seo_form.text_field :first_name %>
+<% end %>
+END
+      end
+
+      should "set massassignment_fields" do
+        form_columns = extract_form_columns_from(@generated_html)
+
+        assert !form_columns.blank?
+        expected = {'person' => [
+          'first_name', 
+          {"seo_attributes"=>{"columns"=>["first_name", "id"], "type"=>"one"}} 
+          ]
+        }
+        assert_equal(expected, form_columns)
+      end
+    end
+    
     context "with fields_for many reflection" do 
       setup do 
         @generated_html = form_for_input <<-END

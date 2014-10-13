@@ -116,12 +116,37 @@ module MassassignmentSecurityForm
       
       params.each do |massassignment_key, value| 
         if value.is_a?(Hash)
-          attrs = form_columns_for(massassignment_key.to_s).collect(&:to_s)
+          form_columns = form_columns_for(massassignment_key.to_s)
+          attrs = form_columns.select do |item|
+            !item.is_a?(Hash)
+          end.collect(&:to_s)
+          
+          nested = (form_columns - attrs).inject({}) do |sum, item|
+            sum.merge(item)
+          end
+
           value.reject! do |attr, attr_value|
             attr_name = attr.to_s
-            # normale Attribute
-            # oder date_select attribute
-            !(attrs.include?(attr_name) || attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
+            # normale Attribute,
+            # date_select attribute
+            # oder nested attributes
+            !(attrs.include?(attr_name) || 
+              attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')) ||
+              !nested[attr.to_s].nil?)
+          end
+
+          nested.each do |config_attr, config|
+            attr_hash = value[config_attr]
+            config.symbolize_keys!
+            attrs = config[:columns].collect(&:to_s)
+            
+            attr_hash.reject! do |attr, attr_value|
+              attr_name = attr.to_s
+              # normale Attribute
+              # oder date_select attribute
+              !(attrs.include?(attr_name) || 
+                attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
+            end
           end
         end
       end
