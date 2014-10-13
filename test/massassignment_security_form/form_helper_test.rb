@@ -105,19 +105,31 @@ class MassassignmentSecurityForm::FormHelperTest < ActionView::TestCase
   form_helper_context "select :person, :group_ids", 
     "<%= select :person, :group_ids, {1 => 'admins', 2 => 'test'} %>",
     {'person' => ['group_ids']}
-
-  form_test = <<-END
-  <% def protect_against_forgery?; false; end -%>
-  <% @person = MassassignmentSecurityFormPerson.new -%>
-  <%= form_for @person, :as => :person, :url => '/test' do |f| %>
-    <%= f.fields_for :seo, MassassignmentSecurityFormPerson.new do |seo_form| %>
-      <%= seo_form.text_field :first_name %>
-    <% end %>
-  <% end %>
+  
+  context "A form_for a person" do 
+    context "with fields_for one reflection" do 
+      setup do 
+        @generated_html = form_for_input <<-END
+<%= f.text_field :first_name %>
+<%= f.fields_for :seo, MassassignmentSecurityFormPerson.new(:last_name => 'seo') do |seo_form| %>
+  <%= seo_form.text_field :first_name %>
+<% end %>
 END
-  form_helper_context "form_for with fields_for",
-    form_test,
-    {:person => {:seo_attributes => [:first_name]}}
+      end
+
+      should "set massassignment_fields" do
+        form_columns = extract_form_columns_from(@generated_html)
+
+        assert !form_columns.blank?
+        expected = {'person' => [
+          'first_name', 
+          {'seo_attributes' => ['first_name']} 
+          ]
+        }
+        assert_equal(expected, form_columns)
+      end
+    end
+  end
 
   context "A formtastic form for a person" do 
     context "with input :salutation, :select" do 
@@ -195,6 +207,22 @@ END
       form_html.gsub!('<%= semantic', '<% semantic')
       form_html.gsub!('<%= f.inputs', '<% f.inputs')
       form_html.gsub!(':as => :date_select ', ':as => :date ')
+    end
+    render :inline => form_html
+  end
+
+  def form_for_input(form_line)
+    @person = MassassignmentSecurityFormPerson.new
+    form_html = <<-END
+<% def protect_against_forgery?; false; end -%>
+<%= form_for @person, :as => :person, :url => '/test' do |f| %>
+  #{form_line}
+<% end %>
+END
+    if Rails.version <= '3.0'
+      form_html.gsub!("<%= f.fields_for", "<% f.fields_for")
+      form_html.gsub!('<%= form_for', '<% form_for')
+      form_html.gsub!('form_for @person, :as => :person', 'form_for :person, @person')
     end
     render :inline => form_html
   end

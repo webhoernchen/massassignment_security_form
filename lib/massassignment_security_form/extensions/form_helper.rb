@@ -2,7 +2,6 @@ module MassassignmentSecurityForm
   module Extensions
     module FormHelper
       def text_field(object_name, method, *args)
-        p object_name
         _add_form_field(object_name, method)
         super(object_name, method, *args)
       end

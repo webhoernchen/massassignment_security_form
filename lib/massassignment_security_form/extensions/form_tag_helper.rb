@@ -23,7 +23,12 @@ module MassassignmentSecurityForm
       end
       
       def _add_form_field(object_name, method)
-        _form_fields && _form_fields.add_column(object_name, method)
+        if @_nested_form_field
+          parent_object_name, nested = @_nested_form_field
+          _form_fields && _form_fields.add_nested_column(parent_object_name, nested, method)
+        else
+          _form_fields && _form_fields.add_column(object_name, method)
+        end
       end
       
       def _clear_form_fields
@@ -32,6 +37,14 @@ module MassassignmentSecurityForm
 
       def _generate_form_fields_hash
         _form_fields.to_encrypted_string
+      end
+
+      def _init_nested_form_field_for_key(key)
+        @_nested_form_field = key
+      end
+
+      def _clear_nested_form_field_for_key
+        @_nested_form_field = nil
       end
     end
 
