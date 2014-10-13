@@ -136,23 +136,27 @@ module MassassignmentSecurityForm
           end
 
           nested.each do |config_attr, config|
-            attr_hash = value[config_attr]
             config.symbolize_keys!
-            attrs = config[:columns].collect(&:to_s)
             many_reflection = config[:many_reflection]
+            attr_hash = value[config_attr]
+
+            begin
+              many_reflection && attr_hash.keys.each {|k| Integer(k) } ||
+                !many_reflection && attr_hash.keys.all? {|k| k.match(/[a-z]/) } ||
+                raise('not value')
+            rescue Exception => e
+              value.delete config_attr
+              return
+            end
+
+            attrs = config[:columns].collect(&:to_s)
            
             if many_reflection
-              attr_hash.values.each do |nested_item|
-                nested_item.reject! do |attr, attr_value|
-                  attr_name = attr.to_s
-                  # normale Attribute
-                  # oder date_select attribute
-                  !(attrs.include?(attr_name) || 
-                    attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
-                end
-              end
+              attr_hash.values
             else
-              attr_hash.reject! do |attr, attr_value|
+              [attr_hash]
+            end.each do |nested_item|
+              nested_item.reject! do |attr, attr_value|
                 attr_name = attr.to_s
                 # normale Attribute
                 # oder date_select attribute

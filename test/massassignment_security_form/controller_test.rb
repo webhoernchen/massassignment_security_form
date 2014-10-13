@@ -222,6 +222,83 @@ class MassassignmentSecurityForm::ControllerTest < ActionController::TestCase
         end
       end
     end
+    
+    context "on post :create with valid attributes and with invalid MASSASSIGNMENT_PARAM and nested attributes for many reflection and config is for one reflection" do 
+      setup do
+        @form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        @form_fields.add_column 'person', 'last_name'
+        @form_fields.add_nested_column 'person', 'employees_attributes', false, 'last_name'
+        
+        post :create, :person => {
+          :first_name => 'first name',
+          :last_name => 'last name',
+          :employees_attributes => {
+            '0' => {
+              :first_name => 'first name',
+              :last_name => 'last name'},
+            '1' => {
+              :first_name => 'first name',
+              :last_name => 'last name'}
+            }
+          },
+          MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME => @form_fields.to_encrypted_string
+      end
+
+      should assign_to :person
+      should respond_with :created
+
+      should 'create 1 persons' do 
+        assert_equal 1, MassassignmentSecurityFormPerson.count
+      end
+
+      should 'create the person with last_name and no employee' do 
+        person = assigns(:person)
+
+        assert !person.new_record?
+        person.reload
+
+        assert person.first_name.blank?
+        assert !person.last_name.blank?
+
+        assert person.employees.empty?
+      end
+    end
+    
+    context "on post :create with valid attributes and with invalid MASSASSIGNMENT_PARAM and nested attributes for one reflection and config is for many reflection" do 
+      setup do
+        @form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        @form_fields.add_column 'person', 'last_name'
+        @form_fields.add_nested_column 'person', 'employees_attributes', true, 'last_name'
+        
+        post :create, :person => {
+          :first_name => 'first name',
+          :last_name => 'last name',
+          :seo_attributes => {
+            :first_name => 'first name',
+            :last_name => 'last name'},
+          },
+          MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME => @form_fields.to_encrypted_string
+      end
+
+      should assign_to :person
+      should respond_with :created
+
+      should 'create 1 person' do 
+        assert_equal 1, MassassignmentSecurityFormPerson.count
+      end
+
+      should 'create the person with last_name and no seo' do 
+        person = assigns(:person)
+
+        assert !person.new_record?
+        person.reload
+
+        assert person.first_name.blank?
+        assert !person.last_name.blank?
+
+        assert !person.seo
+      end
+    end
   end
 
   context 'MassassignmentSecurityForm::Config.remove_not_allowed_massassignment_fields = false' do
