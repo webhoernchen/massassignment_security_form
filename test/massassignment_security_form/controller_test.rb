@@ -142,7 +142,7 @@ class MassassignmentSecurityForm::ControllerTest < ActionController::TestCase
       setup do
         @form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
         @form_fields.add_column 'person', 'last_name'
-        @form_fields.add_nested_column 'person', 'seo_attributes', 'one', 'last_name'
+        @form_fields.add_nested_column 'person', 'seo_attributes', false, 'last_name'
         
         post :create, :person => {
           :first_name => 'first name',
@@ -174,6 +174,52 @@ class MassassignmentSecurityForm::ControllerTest < ActionController::TestCase
         seo.reload
         assert seo.first_name.blank?
         assert !seo.last_name.blank?
+      end
+    end
+    
+    context "on post :create with valid attributes and with invalid MASSASSIGNMENT_PARAM and nested attributes for many reflection" do 
+      setup do
+        @form_fields = MassassignmentSecurityForm::MassassignmentColumnsHash.new
+        @form_fields.add_column 'person', 'last_name'
+        @form_fields.add_nested_column 'person', 'employees_attributes', true, 'last_name'
+        
+        post :create, :person => {
+          :first_name => 'first name',
+          :last_name => 'last name',
+          :employees_attributes => {
+            '0' => {
+              :first_name => 'first name',
+              :last_name => 'last name'},
+            '1' => {
+              :first_name => 'first name',
+              :last_name => 'last name'}
+            }
+          },
+          MassassignmentSecurityForm::Config::MASSASSIGNMENT_PARAMS_NAME => @form_fields.to_encrypted_string
+      end
+
+      should assign_to :person
+      should respond_with :created
+
+      should 'create 3 persons' do 
+        assert_equal 3, MassassignmentSecurityFormPerson.count
+      end
+
+      should 'create the person with last_name and the employees with last_name' do 
+        person = assigns(:person)
+
+        assert !person.new_record?
+        person.reload
+
+        assert person.first_name.blank?
+        assert !person.last_name.blank?
+
+        assert !person.employees.empty?
+        person.employees.each do |employee|
+          employee.reload
+          assert employee.first_name.blank?
+          assert !employee.last_name.blank?
+        end
       end
     end
   end

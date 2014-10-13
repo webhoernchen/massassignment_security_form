@@ -139,13 +139,26 @@ module MassassignmentSecurityForm
             attr_hash = value[config_attr]
             config.symbolize_keys!
             attrs = config[:columns].collect(&:to_s)
-            
-            attr_hash.reject! do |attr, attr_value|
-              attr_name = attr.to_s
-              # normale Attribute
-              # oder date_select attribute
-              !(attrs.include?(attr_name) || 
-                attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
+            many_reflection = config[:many_reflection]
+           
+            if many_reflection
+              attr_hash.values.each do |nested_item|
+                nested_item.reject! do |attr, attr_value|
+                  attr_name = attr.to_s
+                  # normale Attribute
+                  # oder date_select attribute
+                  !(attrs.include?(attr_name) || 
+                    attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
+                end
+              end
+            else
+              attr_hash.reject! do |attr, attr_value|
+                attr_name = attr.to_s
+                # normale Attribute
+                # oder date_select attribute
+                !(attrs.include?(attr_name) || 
+                  attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
+              end
             end
           end
         end
