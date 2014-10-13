@@ -81,18 +81,21 @@ module MassassignmentSecurityForm
         unless form_columns_for(object_name).include?(method_name.to_s)
     end
 
-    def add_nested_column(object_name, nested, method_name)
+    def add_nested_column(object_name, nested, one_or_many_reflection, method_name)
       columns = form_columns_for(object_name)
       nested_columns = columns.detect do |item|
         item.is_a?(Hash) && item.keys.collect(&:to_sym).include?(nested.to_sym)
       end
+
       unless nested_columns
-        nested_columns ||= {nested => []}
+        nested_columns ||= {nested => {:columns => [], :type => one_or_many_reflection}}
         columns << nested_columns
       end
+
+      nested_columns = nested_columns[nested][:columns]
       
-      nested_columns[nested] << method_name.to_s \
-        unless nested_columns[nested].include?(method_name.to_s)
+      nested_columns << method_name.to_s \
+        unless nested_columns.include?(method_name.to_s)
     end
 
     def to_encrypted_string

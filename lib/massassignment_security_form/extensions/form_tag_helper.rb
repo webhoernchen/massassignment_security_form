@@ -24,8 +24,8 @@ module MassassignmentSecurityForm
       
       def _add_form_field(object_name, method)
         if @_nested_form_field
-          parent_object_name, nested = @_nested_form_field
-          _form_fields && _form_fields.add_nested_column(parent_object_name, nested, method)
+          parent_object_name, nested, one_or_many_reflection = @_nested_form_field
+          _form_fields && _form_fields.add_nested_column(parent_object_name, nested, one_or_many_reflection, method)
         else
           _form_fields && _form_fields.add_column(object_name, method)
         end
