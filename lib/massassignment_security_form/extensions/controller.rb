@@ -2,8 +2,16 @@ module MassassignmentSecurityForm
   module Extensions
     module Controller
       def self.included(base)
+        method_name = :remove_not_allowed_massassignment_fields_from_params
+        
+        # fix DEPRECATION WARNING:
+        # before_filter is deprecated and will be removed in Rails 5.1. Use before_action instead
         base.class_eval do
-          before_filter :remove_not_allowed_massassignment_fields_from_params
+          if respond_to? :before_action
+            before_action method_name
+          else
+            before_filter method_name
+          end
         end
       end
 
