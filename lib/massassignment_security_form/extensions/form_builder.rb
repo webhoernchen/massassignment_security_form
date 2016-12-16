@@ -1,13 +1,7 @@
 module MassassignmentSecurityForm
   module Extensions
     module FormBuilder
-      def self.included(base)
-        base.class_eval do 
-          alias_method_chain :fields_for, :massassignment_security_form
-        end
-      end
-
-      def fields_for_with_massassignment_security_form(name, *args, &block)
+      def fields_for(name, *args, &block)
         key = if nested_attributes_association? name
           "#{name}_attributes".to_sym
         else
@@ -21,7 +15,7 @@ module MassassignmentSecurityForm
         end
        
         @template.send :_init_nested_form_field_for_key, [object_name, key, many_reflection]
-        fields_for_without_massassignment_security_form name, *args, &block
+        super
       ensure
         @template.send :_clear_nested_form_field_for_key
       end
@@ -29,4 +23,4 @@ module MassassignmentSecurityForm
   end
 end
 
-ActionView::Helpers::FormBuilder.send :include, MassassignmentSecurityForm::Extensions::FormBuilder
+ActionView::Helpers::FormBuilder.send :prepend, MassassignmentSecurityForm::Extensions::FormBuilder
