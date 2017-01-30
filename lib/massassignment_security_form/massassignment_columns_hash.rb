@@ -27,7 +27,7 @@ module MassassignmentSecurityForm
   class MassassignmentColumnsHash
     class << self
       def encrypt(string)
-        cipher = OpenSSL::Cipher::Cipher.new(Config::SSL_VERSION)
+        cipher = OpenSSL::Cipher.new(Config::SSL_VERSION)
         cipher.encrypt
         # your pass is what is used to encrypt/decrypt
         cipher.key = password_key
@@ -42,7 +42,7 @@ module MassassignmentSecurityForm
         encoded = Base32.decode(string)
         encrypted_hash = JSON.parse(encoded).symbolize_keys
 
-        cipher = OpenSSL::Cipher::Cipher.new(Config::SSL_VERSION)
+        cipher = OpenSSL::Cipher.new(Config::SSL_VERSION)
         cipher.decrypt
         cipher.key = password_key
         cipher.iv = Base32.decode(encrypted_hash[:iv])
