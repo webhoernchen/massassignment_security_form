@@ -124,7 +124,7 @@ module MassassignmentSecurityForm
       allowed_keys = form_columns.stringify_keys.keys
       params.each do |key, value| 
         if params_klasses.any? {|k| value.is_a? k } && !allowed_keys.include?(key.to_s)
-          value.clear
+          params[key] = {}
         end
       end
       

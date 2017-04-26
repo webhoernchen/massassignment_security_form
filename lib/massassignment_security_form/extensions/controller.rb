@@ -33,8 +33,8 @@ module MassassignmentSecurityForm
 
       def remove_all_massassignemnts_from_params
         params.each do |key, value| 
-          if value.is_a?(Hash)
-            value.clear
+          if MassassignmentSecurityForm::MassassignmentColumnsHash.params_klasses.any? {|k| value.is_a? k }
+            params[key] = {}
           end
         end
       end
