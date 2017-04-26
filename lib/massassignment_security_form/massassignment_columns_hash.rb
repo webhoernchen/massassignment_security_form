@@ -65,11 +65,25 @@ module MassassignmentSecurityForm
         end
       end
 
+      def params_klasses
+        @params_klasses ||= [Hash, params_klass].uniq
+      end
+
+      def params_klass
+        @params_klass ||= if defined? ActionController::Parameters
+          ActionController::Parameters
+        else
+          Hash
+        end
+      end
+
       private
       def password_key
         @password_key ||= Digest::SHA1.hexdigest(Config.password).unpack('a2'*32).map{|x| x.hex}.pack('c'*32)
       end
     end
+
+    delegate :params_klasses, :to => :class
 
     def set_from_json(json)
       @form_columns = JSON.parse(json)
@@ -109,14 +123,19 @@ module MassassignmentSecurityForm
     def remove_not_allowed_massassignments_from(params)
       allowed_keys = form_columns.stringify_keys.keys
       params.each do |key, value| 
-        if value.is_a?(Hash) && !allowed_keys.include?(key.to_s)
+        if params_klasses.any? {|k| value.is_a? k } && !allowed_keys.include?(key.to_s)
           value.clear
         end
       end
       
+      remove_not_allowed_massassignments_recursiv_from params
+    end
+    
+    private
+    def remove_not_allowed_massassignments_recursiv_from(params, attrs=nil)
       params.each do |massassignment_key, value| 
-        if value.is_a?(Hash)
-          form_columns = form_columns_for(massassignment_key.to_s)
+        if params_klasses.any? {|k| value.is_a? k }
+          form_columns = attrs || form_columns_for(massassignment_key.to_s)
           attrs = form_columns.select do |item|
             !item.is_a?(Hash)
           end.collect(&:to_s)
@@ -144,25 +163,17 @@ module MassassignmentSecurityForm
               many_reflection && attr_hash.keys.each {|k| Integer(k) } ||
                 !many_reflection && attr_hash.keys.all? {|k| k.match(/[a-z]/) } ||
                 raise('not value')
-            rescue Exception => e
+            rescue Exception# => e
               value.delete config_attr
               return
             end
-
-            attrs = config[:columns].collect(&:to_s)
            
             if many_reflection
               attr_hash.values
             else
               [attr_hash]
             end.each do |nested_item|
-              nested_item.reject! do |attr, attr_value|
-                attr_name = attr.to_s
-                # normale Attribute
-                # oder date_select attribute
-                !(attrs.include?(attr_name) || 
-                  attrs.include?(attr_name.gsub(/\([1-6]i\)$/, '')))
-              end
+              remove_not_allowed_massassignments_recursiv_from({:r => nested_item}, config[:columns])
             end
           end
         end
@@ -171,7 +182,17 @@ module MassassignmentSecurityForm
 
     private
     def form_columns_for(object_name)
-      form_columns[object_name.to_s] ||= []
+      object_name.to_s.split(/[\[\]]/).select do |part| 
+        part.present? && !part.match(/^[0-9]+$/)
+      end.inject(form_columns) do |sum, part|
+        if sum.is_a? Hash
+          sum[part] ||= []
+        else
+          sum.detect do |column|
+            column.is_a?(Hash) && column.keys.collect(&:to_sym) == [part.to_sym]
+          end[part.to_sym][:columns]
+        end
+      end
     end
   end
 end
