@@ -22,6 +22,11 @@ MassassignmentSecurityForm::Config.password = 'test123honk456'
 class ActiveSupport::TestCase
   include MassassignmentSecurityFormTestCase
 
-  self.use_transactional_fixtures = true
+  if self.respond_to? :use_transactional_fixtures=
+    self.use_transactional_fixtures = true
+  else
+    self.use_transactional_tests = true
+  end
+
   self.use_instantiated_fixtures  = false
 end
