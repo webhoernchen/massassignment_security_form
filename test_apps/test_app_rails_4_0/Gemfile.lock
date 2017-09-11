@@ -2,9 +2,9 @@ PATH
   remote: ../../../
   specs:
     massassignment_security_form (1.0.0)
-      actionpack (>= 2.3)
+      actionpack (>= 4.0)
       base32
-      rails (>= 2.3)
+      rails (>= 4.0)
 
 GEM
   remote: https://rubygems.org/
