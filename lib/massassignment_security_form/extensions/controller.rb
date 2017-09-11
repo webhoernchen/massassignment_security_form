@@ -1,7 +1,7 @@
 module MassassignmentSecurityForm
   module Extensions
     module Controller
-      def self.included(base)
+      def self.prepended(base)
         method_name = :remove_not_allowed_massassignment_fields_from_params
         
         # fix DEPRECATION WARNING:

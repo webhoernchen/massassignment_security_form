@@ -1,13 +1,7 @@
 module MassassignmentSecurityForm
   module Extensions
     module FormTagHelper
-      def self.included(base)
-        base.class_eval do 
-          alias_method_chain :form_tag, :massassignment_security
-          alias_method_chain :form_for, :massassignment_security
-        end
-      end
-
+      
       private
       def create_hidden_field_for_form_fields
         tag :input, :value => _generate_form_fields_hash, 
@@ -46,7 +40,8 @@ module MassassignmentSecurityForm
       def _clear_nested_form_field_for_key
         @_nested_form_field = nil
       end
-      
+     
+      public
       def form_tag(*form_args, &block)
         if block_given? && @_form_fields.nil?
           _init_form_fields

@@ -15,8 +15,8 @@ begin
   require "massassignment_security_form/extensions/form_builder"
   require "massassignment_security_form/massassignment_columns_hash"
 
-  ActionView::Base.send(:include, MassassignmentSecurityForm::Extensions::FormHelper)
-  ActionController::Base.send(:include, MassassignmentSecurityForm::Extensions::Controller)
+  ActionView::Base.send :prepend, MassassignmentSecurityForm::Extensions::FormHelper
+  ActionController::Base.send :prepend, MassassignmentSecurityForm::Extensions::Controller
 rescue Exception => e
   p e.message
   p 'Could not init massassignment_security_form'
