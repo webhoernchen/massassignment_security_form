@@ -20,17 +20,17 @@ Gem::Specification.new do |s|
   
   if s.respond_to? :specification_version then
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency('rails', ">= 3.0")
-      s.add_runtime_dependency('actionpack', ">= 3.0")
+      s.add_runtime_dependency('rails', ">= 4.0")
+      s.add_runtime_dependency('actionpack', ">= 4.0")
       s.add_runtime_dependency('base32')
     else
-      s.add_dependency('rails', ">= 3.0")
-      s.add_dependency('actionpack', ">= 3.0")
+      s.add_dependency('rails', ">= 4.0")
+      s.add_dependency('actionpack', ">= 4.0")
       s.add_dependency('base32')
     end
   else
-    s.add_dependency('rails', ">= 3.0")
-    s.add_dependency('actionpack', ">= 3.0")
+    s.add_dependency('rails', ">= 4.0")
+    s.add_dependency('actionpack', ">= 4.0")
     s.add_dependency('base32')
   end
 
