@@ -56,6 +56,11 @@ module MassassignmentSecurityForm
         super(object_name, method, *args)
       end
 
+      def date_field(object_name, method, *args)
+        _add_form_field(object_name, method)
+        super(object_name, method, *args)
+      end
+
       def file_column_field(object_name, method, *args)
         _add_form_field(object_name, method)
         _add_form_field(object_name, method.to_s + '_temp')
@@ -72,7 +77,17 @@ module MassassignmentSecurityForm
         super(object_name, method, *args)
       end
 
+      def time_field(object_name, method, *args)
+        _add_form_field(object_name, method)
+        super(object_name, method, *args)
+      end
+
       def datetime_select(object_name, method, *args)
+        _add_form_field(object_name, method)
+        super(object_name, method, *args)
+      end
+
+      def datetime_field(object_name, method, *args)
         _add_form_field(object_name, method)
         super(object_name, method, *args)
       end
