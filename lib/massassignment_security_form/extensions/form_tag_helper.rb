@@ -34,6 +34,8 @@ module MassassignmentSecurityForm
       end
 
       def _init_nested_form_field_for_key(key)
+        parent_object_name, nested, many_reflection = key
+        _form_fields && _form_fields.init_nested_column(parent_object_name, nested, many_reflection)
         @_nested_form_field = key
       end
 
@@ -46,7 +48,7 @@ module MassassignmentSecurityForm
         if block_given? && @_form_fields.nil?
           _init_form_fields
 
-          html = super *form_args do |*args|
+          html = super(*form_args) do |*args|
             capture(*args, &block).to_s.html_safe << create_hidden_field_for_form_fields.html_safe
           end
           
@@ -61,7 +63,7 @@ module MassassignmentSecurityForm
       def form_for(*args, &block)
         _init_form_fields
         
-        html = super *args do |f|
+        html = super(*args) do |f|
           capture(f, &block).to_s.html_safe << create_hidden_field_for_form_fields.html_safe
         end
 

@@ -112,6 +112,18 @@ module MassassignmentSecurityForm
         unless nested_columns.include?(method_name.to_s)
     end
 
+    def init_nested_column(object_name, nested, many_reflection)
+      columns = form_columns_for(object_name)
+      nested_columns = columns.detect do |item|
+        item.is_a?(Hash) && item.keys.collect(&:to_sym).include?(nested.to_sym)
+      end
+
+      unless nested_columns
+        nested_columns ||= {nested => {:columns => [], :many_reflection => many_reflection}}
+        columns << nested_columns
+      end
+    end
+
     def to_encrypted_string
       self.class.encrypt form_columns.to_json
     end
@@ -188,9 +200,12 @@ module MassassignmentSecurityForm
         if sum.is_a? Hash
           sum[part] ||= []
         else
-          sum.detect do |column|
+          result = sum.detect do |column|
             column.is_a?(Hash) && column.keys.collect(&:to_sym) == [part.to_sym]
-          end[part.to_sym][:columns]
+          end
+          result = result[part.to_sym]
+          result = result[:columns]
+          result
         end
       end
     end
