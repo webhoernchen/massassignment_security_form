@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.summary     = "Massassignment protection in forms"
   s.description = "Massassignment protection in forms"
 
-  s.rubyforge_project = "massassignment_security_form"
   s.files         = Dir.glob(File.expand_path("../**/*", __FILE__)).select {|f| File.file?(f) }.collect {|f| f.gsub(File.expand_path("../", __FILE__) + '/', '') }
   s.test_files    = []
   s.executables   = []
